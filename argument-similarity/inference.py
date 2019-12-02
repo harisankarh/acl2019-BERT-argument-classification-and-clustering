@@ -102,14 +102,6 @@ for idx in range(len(predicted_logits)):
 #Sort by similarity
 output_examples = sorted(output_examples, key=lambda x: x[2], reverse=True)
 
-print("Predicted similarities (sorted by similarity):")
-for idx in range(len(output_examples)):
-    example = output_examples[idx]
-    print("Sentence A:", example[0])
-    print("Sentence B:", example[1])
-    print("Similarity:", example[2])
-    print("")
-
 if args.output_files_prefix:
     unique_sentences = list(set(arguments))
     sentence_to_id = defaultdict(dict)
@@ -134,3 +126,13 @@ if args.output_files_prefix:
     with open(sim_scores_dict_file, 'wb') as handle:
         pickle.dump(sim_scores_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+if len(output_examples) > 10:
+    output_examples = output_examples[:5] + output_examples[-5:]
+
+print("Predicted similarities (sorted by similarity):")
+for idx in range(len(output_examples)):
+    example = output_examples[idx]
+    print("Sentence A:", example[0])
+    print("Sentence B:", example[1])
+    print("Similarity:", example[2])
+    print("")
