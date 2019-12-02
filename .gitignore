@@ -2,3 +2,6 @@
 *.bin
 .idea
 models/*
+bert_output/*
+*.local
+*__pycache__*
