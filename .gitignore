@@ -1,3 +1,4 @@
 *.tsv
 *.bin
 .idea
+models/*

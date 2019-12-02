@@ -16,8 +16,8 @@ from train import InputExample, convert_examples_to_features
 from SigmoidBERT import SigmoidBERT
 
 # See the README.md where to download pre-trained models
-#model_path = 'bert_output/ukp_aspects_all' #ukp_aspects_all model: trained
-model_path = 'bert_output/misra_all' #misra_all model: Trained on all 3 topics from Misra et al., 2016
+model_path = 'bert_output/ukp_aspects_all' #ukp_aspects_all model: trained
+#model_path = 'bert_output/misra_all' #misra_all model: Trained on all 3 topics from Misra et al., 2016
 
 
 max_seq_length = 64
