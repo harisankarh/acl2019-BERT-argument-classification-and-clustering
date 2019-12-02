@@ -17,7 +17,8 @@ from SigmoidBERT import SigmoidBERT
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("input_text_file", type=str, default=None)
+parser.add_argument("--input_text_file", type=str, default=None, \
+    help='new line delimited file containing input test')
 
 args = parser.parse_args()
 
