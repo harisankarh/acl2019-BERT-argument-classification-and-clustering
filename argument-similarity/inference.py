@@ -34,7 +34,7 @@ max_seq_length = 64
 eval_batch_size = 8
 
 if args.input_text_file:
-    input_df = pd.read_csv(args.input_text_file_csv, sep='\t'):
+    input_df = pd.read_csv(args.input_text_file_csv, sep='\t')
     arguments = list(input_df[input_file_csv_text_field])
 else:
     arguments = ['Zoos save species from extinction and other dangers.',
