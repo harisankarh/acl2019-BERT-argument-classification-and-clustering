@@ -25,7 +25,7 @@ parser.add_argument("--input_text_file_csv", type=str, \
     help='csv file containing input test')
 parser.add_argument("--input_file_csv_text_field", type=str, \
     help='column containing text to be analyzed')
-parser.add_argument("--output_files_prefix", type=bool, default=False\
+parser.add_argument("--output_files_prefix", type=bool, default=False, \
     help='file prefix to dump output as pickled dict files')
 
 
