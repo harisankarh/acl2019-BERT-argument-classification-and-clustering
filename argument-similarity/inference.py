@@ -15,10 +15,13 @@ from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 from train import InputExample, convert_examples_to_features
 from SigmoidBERT import SigmoidBERT
 import argparse
+import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input_text_file", type=str, default=None, \
-    help='new line delimited file containing input test')
+parser.add_argument("--input_text_file_csv", type=str, \
+    help='csv file containing input test')
+parser.add_argument("--input_file_csv_text_field", type=str, \
+    help='column containing text to be analyzed')
 
 args = parser.parse_args()
 
@@ -31,7 +34,8 @@ max_seq_length = 64
 eval_batch_size = 8
 
 if args.input_text_file:
-    pass
+    input_df = pd.read_csv(args.input_text_file_csv, sep='\t'):
+    arguments = list(input_df[input_file_csv_text_field])
 else:
     arguments = ['Zoos save species from extinction and other dangers.',
                 'Zoos produce helpful scientific research.',
