@@ -14,6 +14,12 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 from train import InputExample, convert_examples_to_features
 from SigmoidBERT import SigmoidBERT
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("input_text_file", type=str, default=None)
+
+args = parser.parse_args()
 
 # See the README.md where to download pre-trained models
 model_path = 'bert_output/ukp_aspects_all' #ukp_aspects_all model: trained
@@ -23,15 +29,18 @@ model_path = 'bert_output/ukp_aspects_all' #ukp_aspects_all model: trained
 max_seq_length = 64
 eval_batch_size = 8
 
-arguments = ['Zoos save species from extinction and other dangers.',
-             'Zoos produce helpful scientific research.',
-             'Zoos are detrimental to animals\' physical health.',
-             'Zoo confinement is psychologically damaging to animals.',
-             'Eating meat is not cruel or unethical; it is a natural part of the cycle of life. ',
-             'It is cruel and unethical to kill animals for food when vegetarian options are available',
-             'Overwhelming scientific consensus says human activity is primarily responsible for global climate change.',
-             'Rising levels of human-produced gases released into the atmosphere create a greenhouse effect that traps heat and causes global warming.'
-             ]
+if args.input_text_file:
+    pass
+else:
+    arguments = ['Zoos save species from extinction and other dangers.',
+                'Zoos produce helpful scientific research.',
+                'Zoos are detrimental to animals\' physical health.',
+                'Zoo confinement is psychologically damaging to animals.',
+                'Eating meat is not cruel or unethical; it is a natural part of the cycle of life. ',
+                'It is cruel and unethical to kill animals for food when vegetarian options are available',
+                'Overwhelming scientific consensus says human activity is primarily responsible for global climate change.',
+                'Rising levels of human-produced gases released into the atmosphere create a greenhouse effect that traps heat and causes global warming.'
+                ]
 
 #Compare every argument with each other
 input_examples = []
