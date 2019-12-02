@@ -33,9 +33,9 @@ model_path = 'bert_output/ukp_aspects_all' #ukp_aspects_all model: trained
 max_seq_length = 64
 eval_batch_size = 8
 
-if args.input_text_file:
+if args.input_text_file_csv:
     input_df = pd.read_csv(args.input_text_file_csv, sep='\t')
-    arguments = list(input_df[input_file_csv_text_field])
+    arguments = list(input_df[args.input_file_csv_text_field])
 else:
     arguments = ['Zoos save species from extinction and other dangers.',
                 'Zoos produce helpful scientific research.',
