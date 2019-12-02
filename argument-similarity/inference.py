@@ -16,12 +16,18 @@ from train import InputExample, convert_examples_to_features
 from SigmoidBERT import SigmoidBERT
 import argparse
 import pandas as pd
+from tqdm import tqdm
+import pickle
+from collections import defaultdict
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input_text_file_csv", type=str, \
     help='csv file containing input test')
 parser.add_argument("--input_file_csv_text_field", type=str, \
     help='column containing text to be analyzed')
+parser.add_argument("--output_files_prefix", type=bool, default=False\
+    help='file prefix to dump output as pickled dict files')
+
 
 args = parser.parse_args()
 
@@ -36,6 +42,7 @@ eval_batch_size = 8
 if args.input_text_file_csv:
     input_df = pd.read_csv(args.input_text_file_csv, sep='\t')
     arguments = list(input_df[args.input_file_csv_text_field])
+    arguments = list(set(arguments)) # remove repetitions
 else:
     arguments = ['Zoos save species from extinction and other dangers.',
                 'Zoos produce helpful scientific research.',
@@ -51,7 +58,7 @@ else:
 input_examples = []
 output_examples = []
 
-for i in range(0, len(arguments)-1):
+for i in tqdm(range(0, len(arguments)-1)):
     for j in range(i+1, len(arguments)):
         input_examples.append(InputExample(text_a=arguments[i], text_b=arguments[j], label=-1))
         output_examples.append([arguments[i], arguments[j]])
@@ -77,7 +84,7 @@ model.eval()
 
 predicted_logits = []
 with torch.no_grad():
-    for input_ids, input_mask, segment_ids in eval_dataloader:
+    for input_ids, input_mask, segment_ids in tqdm(eval_dataloader):
         input_ids = input_ids.to(device)
         input_mask = input_mask.to(device)
         segment_ids = segment_ids.to(device)
@@ -102,4 +109,28 @@ for idx in range(len(output_examples)):
     print("Sentence B:", example[1])
     print("Similarity:", example[2])
     print("")
+
+if args.output_files_prefix:
+    unique_sentences = list(set(arguments))
+    sentence_to_id = defaultdict(dict)
+    id_to_sentence = defaultdict(dict)
+    for ctr, unique_sentence in enumerate(unique_sentences):
+        sentence_to_id[unique_sentence] = ctr
+        id_to_sentence[ctr] = unique_sentence
+    sim_scores_dict = defaultdict(dict)
+    for sent_a, sent_b, sim_score in output_examples:
+        sent_a_id = sentence_to_id[sent_a]
+        sent_b_id = sentence_to_id[sent_b]
+        sim_scores_dict[sent_a_id][sent_b_id] = sim_score
+
+    sentence_to_id_file = args.output_files_prefix + '_sentence_to_id.pickle'
+    id_to_sentence_file = args.output_files_prefix + '_id_to_sentence_file.pickle'
+    sim_scores_dict_file = args.output_files_prefix + '_sim_scores_dict_file.pickle'
+
+    with open(sentence_to_id_file, 'wb') as handle:
+        pickle.dump(sentence_to_id, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(id_to_sentence_file, 'wb') as handle:
+        pickle.dump(id_to_sentence, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(sim_scores_dict_file, 'wb') as handle:
+        pickle.dump(sim_scores_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
